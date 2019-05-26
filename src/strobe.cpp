@@ -4,7 +4,7 @@ namespace CSTORBE_NAMESPACE {
     
 template <class T, size_t Sec>
 Strobe<T, Sec>::Strobe(uint8_t *proto, size_t protolen):
-    pos(0), posbegin(0), I0(-1), initialized(false) {
+    pos(0), posbegin(0), I0(0xff), initialized(false) {
     uint8_t domain[18] = {
         1, R + 2, 1, 0, 
         1, 12 * 8,
@@ -48,9 +48,8 @@ void Strobe<T, Sec>::_duplex(uint8_t *buffer, size_t buffer_len,
         state[pos]  ^= buffer[i];
         if (cafter)
             buffer[i]  = state[pos];
-        std::cout << std::dec << "pos:" << (uint32_t)pos 
-            << " " << std::hex << (uint32_t) state[i]
-            << " " << (uint32_t)buffer[i] << std::endl;
+        CSTORBE_DEBUG(std::dec << (uint32_t)pos << " " << std::hex << (uint32_t)state[i] << " " << (uint32_t)buffer[i]);
+
         ++ pos;
         if (pos == R) 
             _run_f();
@@ -60,8 +59,9 @@ void Strobe<T, Sec>::_duplex(uint8_t *buffer, size_t buffer_len,
 }
 template <class T, size_t Sec>
 void Strobe<T, Sec>::_begin_op(uint8_t flags) {
+    CSTORBE_DEBUG( std::hex << "flags: " << (uint32_t)I0 << (uint32_t) flags);
     if (flags & FLAGS_T) {
-        if (I0 == -1)
+        if (I0 == 0xff)
             I0 = flags & FLAGS_I;
         flags ^= I0;
     }
@@ -87,7 +87,6 @@ bool Strobe<T, Sec>::operate(uint8_t flags, uint8_t *buffer, size_t buffer_len, 
     bool recv_MAC = (flags & (0xF | FLAGS_I)) == ((FLAGS_T | FLAGS_C) | FLAGS_I);
     
     _duplex(buffer, buffer_len, cbefore, cafter, false);
-    
     
     if (recv_MAC) {
         uint8_t MAC_verif = 0;
