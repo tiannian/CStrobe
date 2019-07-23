@@ -32,7 +32,7 @@ void assert_state(const string &s,uint64_t *state) {
     uint64_t buffer;
     for (auto i = 0; i!= 25; i++) {
         ss >> hex >> buffer;
-        //cout << hex << buffer << " " << state[i] << endl;
+        cout << hex << buffer << " " << state[i] << endl;
         //assert(buffer == state[i]);
         uint8_t *pb = (uint8_t*)&buffer;
         uint8_t *ps = (uint8_t*)&state[i];
@@ -159,6 +159,22 @@ int main() {
         uint8_t data[] = "hi how are you";
         strobe.recv_MAC(data,sizeof(data) - 1);
         assert_state(s,strobe.kf.state);
+        dump_8(data,sizeof(data) - 1);
+    }
+    
+    {
+        string s = "686920686f772061 726520796f75dbda0 79e69e620959c2a "
+                   "a445fd5522aa93c8 280db4c3c2f7400f5 0efdd714a6ee108 "
+                   "c8db7fc425de03ef 1116b477b929c3507 6f2b0e72e7517f7 "
+                   "e57b51cc85d57f73 fee55a9db690240ba 2f16ea11bd83cfd "
+                   "e4df8a70f66c81a5 2a7e3ca21342ba746 62b42273e5129de "
+                   "3c2d1ca8f0dae234 9c9a9b7cf0df634ba 3112f541a036779 "
+                   "f446afbeff32e642 3c0e58da979b8d87d 66de030eb89bf2e "
+                   "1f95b21efccd41f7 b44b8ca5c2e8dfed3 4e485a6195b3bde "
+                   "6390793866772361";
+        uint8_t data[] = "hi how are you";
+        strobe.send_CLR(data,sizeof(data) - 1);
+        //assert_state(s,strobe.kf.state);
         dump_8(data,sizeof(data) - 1);
     }
     

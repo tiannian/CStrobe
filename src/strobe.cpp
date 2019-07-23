@@ -48,7 +48,7 @@ void Strobe<T, Sec>::_duplex(uint8_t *buffer, size_t buffer_len,
         state[pos]  ^= buffer[i];
         if (cafter)
             buffer[i]  = state[pos];
-        CSTORBE_DEBUG(std::dec << (uint32_t)pos << " " << std::hex << (uint32_t)state[i] << " " << (uint32_t)buffer[i]);
+        //CSTORBE_DEBUG(std::dec << (uint32_t)pos << " " << std::hex << (uint32_t)state[i] << " " << (uint32_t)buffer[i]);
 
         ++ pos;
         if (pos == R) 
@@ -59,7 +59,7 @@ void Strobe<T, Sec>::_duplex(uint8_t *buffer, size_t buffer_len,
 }
 template <class T, size_t Sec>
 void Strobe<T, Sec>::_begin_op(uint8_t flags) {
-    CSTORBE_DEBUG( std::hex << "flags: " << (uint32_t)I0 << (uint32_t) flags);
+    //CSTORBE_DEBUG( std::hex << "flags: " << (uint32_t)I0 << (uint32_t) flags);
     if (flags & FLAGS_T) {
         if (I0 == 0xff)
             I0 = flags & FLAGS_I;
